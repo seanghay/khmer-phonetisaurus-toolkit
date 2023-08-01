@@ -1,0 +1,11 @@
+This Dockerfile includes
+
+- OpenFST
+- Phonetisaurus
+- mitlm
+- khmernormalizer
+- khmer-nltk
+- TTS
+- tqdm
+- gradio
+- pydub
