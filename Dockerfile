@@ -32,6 +32,21 @@ RUN ./configure --enable-python && \
     make -j $(nproc) && \
     make install 
 
+WORKDIR /build
+
+RUN wget -O crfpp.tar.gz https://github.com/ringsaturn/crfpp/tarball/544aa02 && \
+	tar -xvzf crfpp.tar.gz && \
+	mv ringsaturn-crfpp-544aa02 crfpp
+
+WORKDIR /build/crfpp
+
+RUN ./configure && \
+    make -j $(nproc) && \
+    make install
+
+WORKDIR /build/crfpp/python
+
+RUN python setup.py build
 
 FROM python:3-slim
 
@@ -56,6 +71,15 @@ RUN ldconfig
 
 # Install required dependencies
 RUN pip3 install --no-cache-dir khmernormalizer khmer-nltk pydub tqdm gradio TTS
+
+WORKDIR /setup/crfpp
+
+COPY --from=build /usr/local/bin/crf_* /usr/local/bin/
+COPY --from=build /usr/local/lib/libcrfpp* /usr/local/lib
+COPY --from=build /build/crfpp/python ./
+RUN python setup.py install
+
+RUN ldconfig
 
 WORKDIR /work
 
