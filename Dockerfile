@@ -71,6 +71,8 @@ RUN ldconfig
 
 # Install required dependencies
 RUN pip3 install --no-cache-dir khmernormalizer khmer-nltk pydub tqdm gradio TTS
+RUN pip3 install --no-cache-dir Flask waitress
+RUN pip3 install --no-cache-dir mecab-python3 unidic-lite
 
 WORKDIR /setup/crfpp
 
